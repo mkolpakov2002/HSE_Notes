@@ -415,6 +415,7 @@ public class EditOneNoteActivity extends AppCompatActivity {
 
         // Alarm rings continuously until toggle button is turned off
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+
     }
 
     public void cancelAlarm() {
