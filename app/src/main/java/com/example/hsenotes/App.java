@@ -8,7 +8,7 @@ import androidx.room.Room;
 
 public class App extends Application {
 
-    public static App instance;
+    private static App instance;
 
     private static AppDataBase database;
 
@@ -19,8 +19,8 @@ public class App extends Application {
         database = Room.databaseBuilder(this, AppDataBase.class, "database")
                 .allowMainThreadQueries()
                 .build();
-        AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        //AppCompatDelegate.setDefaultNightMode(
+        //AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
     public static App getInstance() {

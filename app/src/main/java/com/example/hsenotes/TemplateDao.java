@@ -17,21 +17,7 @@ public interface TemplateDao<N extends Note> {
     @Delete
     void delete(N note);
 
-    // Удаление Note из бд
-    @Query("DELETE FROM note WHERE noteId = :id")
-    void delete(int id);
-
     @Update
     void update(N note);
 
-    // Получение всех Person из бд
-    @Query("SELECT * FROM note")
-    List<N> getAll();
-
-    // Получение всех Person из бд с условием
-    @Query("SELECT * FROM note WHERE noteName LIKE :suchNoteName")
-    List<N> getAllNotesWithSuchNoteName(String suchNoteName);
-
-    @Query("SELECT * FROM note WHERE noteId = :suchId")
-    N getById(long suchId);
 }

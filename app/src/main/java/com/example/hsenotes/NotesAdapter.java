@@ -26,14 +26,13 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private MainActivity ma;
     private final Context context;
     private List<Note> dataSet;
-    private List<Note> allNotes;
+    private final List<Note> allNotes;
     private final NoteClickedListener listener;
     private final List<Note> selectedNotesList;
-    private List<Note> notesListFiltered;
-    NotesAdapter adapter;
+    private final List<Note> notesListFiltered;
 
     public NotesAdapter(List<Note> dataSet, @NonNull Context context) {
-        if (context instanceof MainActivity){
+        if (context instanceof MainActivity) {
             ma = (MainActivity) context;
         }
         this.context = context;
@@ -41,7 +40,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         selectedNotesList = new ArrayList<>();
         allNotes = notesListFiltered = this.dataSet;
         listener = new MyListener();
-        adapter = this;
+
     }
 
 
@@ -70,22 +69,23 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public Filter getFilter() {
         return new Filter() {
             List<Note> resultData;
+
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults filterResults = new FilterResults();
 
-                if(charSequence == null || charSequence.length() == 0){
+                if (charSequence == null || charSequence.length() == 0) {
                     filterResults.count = notesListFiltered.size();
                     filterResults.values = notesListFiltered;
 
-                }else{
+                } else {
                     String searchChr = charSequence.toString().toLowerCase();
 
                     resultData = new ArrayList<>();
 
-                    for(Note userModel: notesListFiltered){
-                        if(userModel.getNoteText().toLowerCase().contains(searchChr)||
-                                userModel.getNoteName().toLowerCase().contains(searchChr)){
+                    for (Note userModel : notesListFiltered) {
+                        if (userModel.getNoteText().toLowerCase().contains(searchChr) ||
+                                userModel.getNoteName().toLowerCase().contains(searchChr)) {
                             resultData.add(userModel);
                         }
                     }
@@ -106,6 +106,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public interface NoteClickedListener {
         void noteClicked(Note item, View itemView);
+
         void noteLongClicked(Note item, View itemView);
     }
 
@@ -115,18 +116,18 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void onNewData(List<Note> newDataSet) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet,dataSet),true);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet, dataSet), true);
         this.dataSet = newDataSet;
         diffResult.dispatchUpdatesTo(this);
     }
 
     public void showFiltered(List<Note> newDataSet) {
-        if(newDataSet != null && newDataSet.size()>0){
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet,dataSet),true);
+        if (newDataSet != null && newDataSet.size() > 0) {
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet, dataSet), true);
             this.dataSet = newDataSet;
             diffResult.dispatchUpdatesTo(this);
         } else {
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(allNotes,dataSet),true);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(allNotes, dataSet), true);
             this.dataSet = allNotes;
             diffResult.dispatchUpdatesTo(this);
         }
@@ -140,13 +141,13 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             MaterialCardView materialCardView = itemView.findViewById(R.id.device_item_card_view);
 
             //проверяю происходит ли выбор списка устройств
-            if(selectedNotesList.size() != 0) {
+            if (selectedNotesList.size() != 0) {
                 Log.d(APP_LOG_TAG, "...Список не пуст, нажато устройство...");
                 //список не пуст
                 //необходимо проверить на присутствие в списке
                 boolean wasAlreadySelected = false;
-                for (Note currentDevice: selectedNotesList) {
-                    if (currentDevice.getNoteId()==(item.getNoteId())) {
+                for (Note currentDevice : selectedNotesList) {
+                    if (currentDevice.getNoteId() == (item.getNoteId())) {
                         selectedNotesList.remove(currentDevice);
                         wasAlreadySelected = true;
                         Log.d(APP_LOG_TAG, "...В списке нашлось это устройство, удаляю...");
@@ -161,15 +162,15 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     selectedNotesList.add(item);
                     item.setIsSelectedOnScreen(true);
                     ma.showDeviceSelectedItems();
-                    materialCardView.setStrokeColor(ContextCompat.getColor(ma,R.color.purple_500));
+                    materialCardView.setStrokeColor(ContextCompat.getColor(ma, R.color.colorAccent));
 
                 } else {
-                    if(selectedNotesList.size() == 0) {
+                    if (selectedNotesList.size() == 0) {
                         Log.d(APP_LOG_TAG, "...Список очищен...");
                         ma.hideDeviceSelectedItems();
                     }
                 }
-                if(selectedNotesList.size()==1){
+                if (selectedNotesList.size() == 1) {
                     ma.showSendAction();
                 } else {
                     ma.hideSendAction();
@@ -177,15 +178,15 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             } else {
                 Log.d(APP_LOG_TAG, "...Список пуст, окно заметки...");
                 Intent intent = new Intent(context, EditOneNoteActivity.class);
-                if(ma.itemIsBirthday(item.getNoteId())){
+                if (ma.itemIsBirthday(item.getNoteId())) {
                     BirthdayDao birthdayDao = App.getDatabase().getBirthdayDao();
                     Birthday note = birthdayDao.getById(item.getNoteId());
                     intent.putExtra("noteObject", note);
-                } else if(ma.itemIsEvent(item.getNoteId())){
+                } else if (ma.itemIsEvent(item.getNoteId())) {
                     EventDao eventDao = App.getDatabase().getEventDao();
                     Event note = eventDao.getById(item.getNoteId());
                     intent.putExtra("noteObject", note);
-                } else if(ma.itemIsReminder(item.getNoteId())){
+                } else if (ma.itemIsReminder(item.getNoteId())) {
                     ReminderDao reminderDao = App.getDatabase().getReminderDao();
                     Reminder note = reminderDao.getById(item.getNoteId());
                     intent.putExtra("noteObject", note);
@@ -203,22 +204,22 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 selectedNotesList.add(item);
                 item.setIsSelectedOnScreen(true);
                 ma.showDeviceSelectedItems();
-                materialCardView.setStrokeColor(ContextCompat.getColor(ma,R.color.purple_500));
+                materialCardView.setStrokeColor(ContextCompat.getColor(ma, R.color.colorAccent));
 
             } else {
                 boolean wasAlreadySelected = false;
                 for (int i = 0; i < selectedNotesList.size(); i++) {
-                    if (selectedNotesList.get(i).getNoteId()==(item.getNoteId())) {
+                    if (selectedNotesList.get(i).getNoteId() == (item.getNoteId())) {
                         wasAlreadySelected = true;
                     }
                 }
                 if (!wasAlreadySelected) {
                     selectedNotesList.add(item);
                     item.setIsSelectedOnScreen(true);
-                    materialCardView.setStrokeColor(ContextCompat.getColor(ma,R.color.purple_500));
+                    materialCardView.setStrokeColor(ContextCompat.getColor(ma, R.color.colorAccent));
                 }
             }
-            if(selectedNotesList.size()==1){
+            if (selectedNotesList.size() == 1) {
                 ma.showSendAction();
             } else {
                 ma.hideSendAction();
@@ -226,19 +227,19 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void clearSelected(){
+    public void clearSelected() {
         selectedNotesList.clear();
     }
 
-    public int getArraySize(){
+    public int getArraySize() {
         return allNotes.size();
     }
 
-    public List<Note> getSelectedNotes(){
+    public List<Note> getSelectedNotes() {
         return selectedNotesList;
     }
 
-    public Note getByIndex(int index){
+    public Note getByIndex(int index) {
         return allNotes.get(index);
     }
 

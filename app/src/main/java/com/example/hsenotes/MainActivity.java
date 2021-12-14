@@ -1,5 +1,6 @@
 package com.example.hsenotes;
 
+import android.app.AlarmManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,11 +36,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private RecyclerView recycler;
     private SwipeRefreshLayout swipeToRefreshLayout;
     private NotesAdapter adapter = null;
-    SearchView searchView;
-    List<Note> newNotesList;
-    List<Birthday> newBirthdayList;
-    List<Event> newEventList;
-    List<Reminder> newReminderList;
+    private SearchView searchView;
+    private List<Birthday> newBirthdayList;
+    private List<Event> newEventList;
+    private List<Reminder> newReminderList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         fabToDelete = findViewById(R.id.floating_action_button_delete);
         fabToDelete.setOnClickListener(v -> {
 
-            for(Note selectedNote: adapter.getSelectedNotes()){
-                if(itemIsBirthday(selectedNote.getNoteId())){
+            for (Note selectedNote : adapter.getSelectedNotes()) {
+                if (itemIsBirthday(selectedNote.getNoteId())) {
                     BirthdayDao birthdayDao = App.getDatabase().getBirthdayDao();
                     birthdayDao.delete(selectedNote.getNoteId());
-                } else if(itemIsEvent(selectedNote.getNoteId())){
+                } else if (itemIsEvent(selectedNote.getNoteId())) {
                     EventDao eventDao = App.getDatabase().getEventDao();
                     eventDao.delete(selectedNote.getNoteId());
-                } else if(itemIsReminder(selectedNote.getNoteId())){
+                } else if (itemIsReminder(selectedNote.getNoteId())) {
                     ReminderDao reminderDao = App.getDatabase().getReminderDao();
                     reminderDao.delete(selectedNote.getNoteId());
                 } else {
@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         fabToSend = findViewById(R.id.floating_action_button_send);
         fabToSend.setOnClickListener(v -> {
-            Note selectedNote = adapter.getSelectedNotes().get(adapter.getSelectedNotes().size()-1);
+            Note selectedNote = adapter.getSelectedNotes().get(adapter.getSelectedNotes().size() - 1);
             String selectedNoteText;
-            if(selectedNote.getNoteName().trim().length()==0 ||
-                    selectedNote.getNoteText().trim().length()==0){
+            if (selectedNote.getNoteName().trim().length() == 0 ||
+                    selectedNote.getNoteText().trim().length() == 0) {
                 selectedNoteText = selectedNote.getNoteName() + selectedNote.getNoteText();
             } else {
                 selectedNoteText = selectedNote.getNoteName()
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT,selectedNoteText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, selectedNoteText);
             shareIntent.setType("text/plain");
             startActivity(shareIntent);
         });
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         fabToAdd = findViewById(R.id.floating_action_button_add);
         fabToAdd.setOnClickListener(v -> {
             DialogFragment noteTypeDialog = new DialogNoteTypeSelector();
-            noteTypeDialog.show(getSupportFragmentManager(),"typeSelection");
+            noteTypeDialog.show(getSupportFragmentManager(), "typeSelection");
             //Intent intent = new Intent(v.getContext(), EditOneNoteActivity.class);
             //v.getContext().startActivity(intent);
         });
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             gridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
         } else {
             // code for landscape mode
-            gridLayoutManager = new StaggeredGridLayoutManager( 3, LinearLayoutManager.VERTICAL);
+            gridLayoutManager = new StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL);
         }
         recycler.setLayoutManager(gridLayoutManager);
 
@@ -135,15 +135,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() { //when click on DELETE
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            adapter.notifyItemRemoved(position);    //item removed from recylcerview
                             Note note = adapter.getByIndex(position);
-                            if(itemIsBirthday(note.getNoteId())){
+                            if (itemIsBirthday(note.getNoteId())) {
                                 BirthdayDao birthdayDao = App.getDatabase().getBirthdayDao();
                                 birthdayDao.delete(note.getNoteId());
-                            } else if(itemIsEvent(note.getNoteId())){
+                            } else if (itemIsEvent(note.getNoteId())) {
                                 EventDao eventDao = App.getDatabase().getEventDao();
                                 eventDao.delete(note.getNoteId());
-                            } else if(itemIsReminder(note.getNoteId())){
+                            } else if (itemIsReminder(note.getNoteId())) {
                                 ReminderDao reminderDao = App.getDatabase().getReminderDao();
                                 reminderDao.delete(note.getNoteId());
                             } else {
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                 devicesDao.delete(note.getNoteId());
                             }
                             onRefresh();
-
                         }
                     }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {  //not removing items if cancel is done
                         @Override
@@ -174,21 +172,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     }
 
-    public void hideDeviceSelectedItems(){
+    public void hideDeviceSelectedItems() {
         fabToDelete.hide();
         invalidateOptionsMenu();
     }
 
-    public void showDeviceSelectedItems(){
+    public void showDeviceSelectedItems() {
         fabToDelete.show();
         invalidateOptionsMenu();
     }
 
-    public void showSendAction(){
+    public void showSendAction() {
         fabToSend.show();
     }
 
-    public void hideSendAction(){
+    public void hideSendAction() {
         fabToSend.hide();
     }
 
@@ -203,10 +201,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
      */
     @Override
     public void onRefresh() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         fabToDelete.hide();
         fabToSend.hide();
         NoteDao notesDao = App.getDatabase().getNoteDao();
-        newNotesList = new ArrayList<>(notesDao.getAll());
+        List<Note> newNotesList = new ArrayList<>(notesDao.getAll());
         BirthdayDao birthdayDao = App.getDatabase().getBirthdayDao();
         newBirthdayList = new ArrayList<>(birthdayDao.getAll());
         EventDao eventDao = App.getDatabase().getEventDao();
@@ -216,8 +215,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         newNotesList.addAll(newBirthdayList);
         newNotesList.addAll(newEventList);
         newNotesList.addAll(newReminderList);
-        if (adapter == null){
-            adapter = new NotesAdapter(newNotesList,this);
+        if (adapter == null) {
+            adapter = new NotesAdapter(newNotesList, this);
             recycler.setAdapter(adapter);
         } else {
             adapter.clearSelected();
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 return false;
             }
         });
-        if(adapter.getSelectedNotes()!=null&&adapter.getSelectedNotes().size()>0){
+        if (adapter.getSelectedNotes() != null && adapter.getSelectedNotes().size() > 0) {
             menu.findItem(R.id.action_search).setVisible(false);
         }
         return true;
@@ -285,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onBackPressed();
     }
 
-    public int getArraySize(){
+    public int getArraySize() {
         return adapter.getArraySize();
     }
 

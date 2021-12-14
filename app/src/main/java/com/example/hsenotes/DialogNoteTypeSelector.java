@@ -1,9 +1,9 @@
 package com.example.hsenotes;
 
-import static com.example.hsenotes.Constants.TYPES_LIST;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +22,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class DialogNoteTypeSelector extends DialogFragment {
 
     private Context c;
-    private Spinner spinnerType;
     private MainActivity ma;
 
     @Override
@@ -40,57 +39,46 @@ public class DialogNoteTypeSelector extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_edit_device, null);
-
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(c);
-        builder.setView(dialogView);
-
-        ArrayAdapter<String> adapterType = new ArrayAdapter<String>(c, android.R.layout.simple_spinner_item, TYPES_LIST);
-        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerType = dialogView.findViewById(R.id.spinner_type);
-        spinnerType.setAdapter(adapterType);
-
-
-        MaterialButton buttonToCancelChanges = dialogView.findViewById(R.id.dialog_edit_cancel);
-        MaterialButton buttonToSaveChanges = dialogView.findViewById(R.id.dialog_edit_save);
-
-        AlertDialog alertDialog = builder.create();
-
-        buttonToCancelChanges.setOnClickListener(view -> {
-            alertDialog.dismiss();
-        });
-
-        buttonToSaveChanges.setOnClickListener(view -> {
-            String noteType = TYPES_LIST[(int) spinnerType.getSelectedItemId()];
+        ArrayAdapter<String> adapterType = new ArrayAdapter<String>(c, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.TYPES_LIST));
+        builder.setSingleChoiceItems(adapterType, 0, (dialogInterface, i) -> {
+            String noteType = getResources().getStringArray(R.array.TYPES_LIST)[i];
             Intent intent = new Intent(c, EditOneNoteActivity.class);
-            switch (noteType) {
-                case "Note":
-                    Note newNote = new Note();
-                    newNote.setNoteId(ma.getArraySize());
-                    intent.putExtra("noteObject", newNote);
-                    break;
-                case "Birthday":
+            switch (i) {
+                case 0:
                     Birthday newBirthday = new Birthday();
                     newBirthday.setNoteId(ma.getArraySize());
                     intent.putExtra("noteObject", newBirthday);
                     break;
-                case "Event":
+                case 1:
+                    Note newNote = new Note();
+                    newNote.setNoteId(ma.getArraySize());
+                    intent.putExtra("noteObject", newNote);
+                    break;
+                case 2:
                     Event newEvent = new Event();
                     newEvent.setNoteId(ma.getArraySize());
                     intent.putExtra("noteObject", newEvent);
                     break;
-                case "Reminder":
+                case 3:
                     Reminder newReminder = new Reminder();
                     newReminder.setNoteId(ma.getArraySize());
                     intent.putExtra("noteObject", newReminder);
                     break;
             }
-            alertDialog.dismiss();
+            dialogInterface.dismiss();
             c.startActivity(intent);
         });
-        return alertDialog;
+        builder.setTitle(c.getResources().getString(R.string.dialog_selection));
+        builder.setNegativeButton(c.getResources().getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+
+        return builder.create();
     }
 
 

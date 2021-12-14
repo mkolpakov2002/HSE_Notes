@@ -11,15 +11,17 @@ public class Converters {
     public static Date fromTimestamp(Long value) {
         return value == null ? null : new Date(value);
     }
+
     @TypeConverter
     public static Long dateToTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
+
     @TypeConverter
     public List<String> gettingListFromString(String genreIds) {
         List<String> list = new ArrayList<>();
 
-        String[] array = genreIds.split(",");
+        String[] array = genreIds.split(";");
 
         for (String s : array) {
             if (!s.isEmpty()) {
@@ -33,8 +35,9 @@ public class Converters {
     public String writingStringFromList(List<String> list) {
         StringBuilder genreIds = new StringBuilder();
         for (String i : list) {
-            genreIds.append(",").append(i);
+            genreIds.append(i).append(";");
         }
+        genreIds.deleteCharAt(genreIds.lastIndexOf(";"));
         return genreIds.toString();
     }
 }

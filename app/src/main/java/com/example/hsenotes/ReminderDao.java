@@ -11,5 +11,18 @@ import java.util.List;
 
 @Dao
 public interface ReminderDao extends TemplateDao<Reminder> {
+    // Удаление Note из бд
+    @Query("DELETE FROM reminder WHERE noteId = :id")
+    void delete(int id);
 
+    // Получение всех Person из бд
+    @Query("SELECT * FROM reminder")
+    List<Reminder> getAll();
+
+    // Получение всех Person из бд с условием
+    @Query("SELECT * FROM reminder WHERE noteName LIKE :suchNoteName")
+    List<Reminder> getAllNotesWithSuchNoteName(String suchNoteName);
+
+    @Query("SELECT * FROM reminder WHERE noteId = :suchId")
+    Reminder getById(long suchId);
 }

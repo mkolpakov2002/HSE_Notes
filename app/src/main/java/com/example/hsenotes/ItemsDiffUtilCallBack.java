@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
 
-public class ItemsDiffUtilCallBack extends DiffUtil.Callback{
+public class ItemsDiffUtilCallBack extends DiffUtil.Callback {
     List<Note> newList;
     List<Note> oldList;
 

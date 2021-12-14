@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorAccent">#376ECC</color>
+    <color name="colorPrimaryPixel">#376ECC</color>
+    <color name="colorPrimaryLightPixel">#729cff</color>
+    <color name="colorPrimaryDarkPixel">#00449a</color>
+    <color name="colorOnPrimaryPixel">#000000</color>
+    <color name="colorSecondaryPixel">#376ECC</color>
+    <color name="colorSecondaryLightPixel">#729cff</color>
+    <color name="colorSecondaryDarkPixel">#00449a</color>
+    <color name="colorOnSecondaryPixel">#000000</color>
     <color name="colorWindowSecondaryLight">#e2e2e2</color>
+
+    <color name="colorPrimaryFDroidDark">#658F36</color>
+    <color name="colorPrimaryLightFDroidDark">#95bf63</color>
+    <color name="colorPrimaryDarkFDroidDark">#366003</color>
+    <color name="colorOnPrimaryFDroidDark">#ffffff</color>
+    <color name="colorTextSecondaryFDroidDark">#ffffff</color>
+    <color name="colorSecondaryFDroidDark">#000000</color>
+    <color name="colorSecondaryLightFDroidDark">#2c2c2c</color>
+    <color name="colorSecondaryDarkFDroidDark">#000000</color>
+    <color name="colorOnSecondaryFDroidDark">#FFFFFF</color>
+    <color name="colorPrimaryDark">#444444</color>
 </resources>

@@ -34,7 +34,7 @@ public class Note implements Serializable {
         this.noteId = another.noteId;
     }
 
-    public void setCreationTime(Date creationTime){
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
 
@@ -66,11 +66,11 @@ public class Note implements Serializable {
         return noteId;
     }
 
-    public void setIsSelectedOnScreen(boolean isSelectedOnScreen){
+    public void setIsSelectedOnScreen(boolean isSelectedOnScreen) {
         this.isSelectedOnScreen = isSelectedOnScreen;
     }
 
-    public boolean getIsSelectedOnScreen(){
+    public boolean getIsSelectedOnScreen() {
         return isSelectedOnScreen;
     }
 
@@ -79,10 +79,16 @@ public class Note implements Serializable {
         mViewHolder.noteName.setText(noteName);
         mViewHolder.textInfo.setText(noteText);
         mViewHolder.materialCardView.setStrokeColor(Color.TRANSPARENT);
-        if(noteName.length()==0){
+        if (noteName.length() == 0) {
             mViewHolder.noteName.setVisibility(View.GONE);
         } else {
             mViewHolder.noteName.setVisibility(View.VISIBLE);
+        }
+
+        if (noteText.length() == 0) {
+            mViewHolder.textInfo.setVisibility(View.GONE);
+        } else {
+            mViewHolder.textInfo.setVisibility(View.VISIBLE);
         }
     }
 }

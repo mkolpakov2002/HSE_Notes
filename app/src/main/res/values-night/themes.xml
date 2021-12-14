@@ -1,23 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.HSENotes" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme_Dark" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/colorPrimaryFDroidDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryFDroidDark</item>
+        <item name="colorAccent">@color/colorPrimaryFDroidDark</item>
+        <item name="colorOnPrimary">@color/colorPrimaryDark</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/colorPrimaryFDroidDark</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryFDroidDark</item>
+        <item name="colorOnSecondary">@color/colorPrimaryDark</item>
         <!-- Customize your theme here. -->
         <item name="colorControlActivated">?attr/colorAccent</item>
         <item name="android:colorControlActivated">?attr/colorAccent</item>
-        <item name="colorPrimaryContainer">?attr/colorSurface</item>
-        <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
-        <item name="android:statusBarColor">?android:attr/windowBackground</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimaryContainer">@color/colorPrimaryFDroidDark</item>
+        <item name="colorSecondaryContainer">@color/colorPrimaryDark</item>
+        <item name="colorOnSecondaryContainer">@color/colorPrimaryFDroidDark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowActionBar">false</item>
-
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="colorPrimarySurface">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/colorOnPrimaryFDroidDark</item>
+        <item name="android:textColorSecondary">@color/colorOnPrimaryFDroidDark</item>
     </style>
 </resources>

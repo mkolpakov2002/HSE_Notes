@@ -19,7 +19,7 @@ public class NotesViewHolder {
         TextView textInfo;
         TextView noteName;
         MainActivity ma;
-        public ConstraintLayout noteLayout;
+        ConstraintLayout noteLayout;
         MaterialCardView materialCardView;
 
         private static final String TAG = "VHFactory";
@@ -32,7 +32,7 @@ public class NotesViewHolder {
             noteLayout = itemView.findViewById(R.id.note_layout);
             materialCardView = itemView.findViewById(R.id.device_item_card_view);
 
-            if (context instanceof Activity){
+            if (context instanceof Activity) {
                 ma = (MainActivity) context;
             }
             itemView.setOnClickListener(v -> {
@@ -46,6 +46,7 @@ public class NotesViewHolder {
 
         interface IListener {
             void onNoteClicked(int id, View itemView);
+
             void onNoteLongClicked(int id, View itemView);
         }
 

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">HSE Notes</string>
+    <string name="cancel_button">Отмена</string>
+    <string name="accept_button">Ок</string>
+    <string name="dialog_selection">Выберите тип создаваемой заметки</string>
+    <string-array name="TYPES_LIST">
+        <item>День рождения</item>
+        <item>Заметка</item>
+        <item>Событие</item>
+        <item>Напоминание ко времени</item>
+    </string-array>
 </resources>
