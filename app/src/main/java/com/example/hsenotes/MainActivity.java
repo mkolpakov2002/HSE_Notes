@@ -130,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 if (direction == ItemTouchHelper.END) {    //if swipe left
 
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this); //alert for confirm to delete
-                    builder.setMessage("Are you sure to delete?");    //set message
+                    builder.setMessage("Удалить выбранный элемент?");    //set message
 
-                    builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() { //when click on DELETE
+                    builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() { //when click on DELETE
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Note note = adapter.getByIndex(position);
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                             }
                             onRefresh();
                         }
-                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {  //not removing items if cancel is done
+                    }).setNegativeButton("Отмена", new DialogInterface.OnClickListener() {  //not removing items if cancel is done
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             onRefresh();
@@ -243,14 +243,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // filter recycler view when query submitted
-                adapter.getFilter().filter(query);
+                if(query.length()>0){
+                    adapter.getFilter().filter(query);
+                } else onRefresh();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
                 // filter recycler view when text is changed
-                adapter.getFilter().filter(query);
+                if(query.length()>0){
+                    adapter.getFilter().filter(query);
+                } else onRefresh();
                 return false;
             }
         });

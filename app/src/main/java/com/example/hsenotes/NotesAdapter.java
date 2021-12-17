@@ -26,10 +26,10 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private MainActivity ma;
     private final Context context;
     private List<Note> dataSet;
-    private final List<Note> allNotes;
+    private List<Note> allNotes;
     private final NoteClickedListener listener;
     private final List<Note> selectedNotesList;
-    private final List<Note> notesListFiltered;
+    private List<Note> notesListFiltered;
 
     public NotesAdapter(List<Note> dataSet, @NonNull Context context) {
         if (context instanceof MainActivity) {
@@ -117,20 +117,14 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void onNewData(List<Note> newDataSet) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet, dataSet), true);
-        this.dataSet = newDataSet;
+        this.dataSet = notesListFiltered = allNotes = newDataSet;
         diffResult.dispatchUpdatesTo(this);
     }
 
     public void showFiltered(List<Note> newDataSet) {
-        if (newDataSet != null && newDataSet.size() > 0) {
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet, dataSet), true);
-            this.dataSet = newDataSet;
-            diffResult.dispatchUpdatesTo(this);
-        } else {
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(allNotes, dataSet), true);
-            this.dataSet = allNotes;
-            diffResult.dispatchUpdatesTo(this);
-        }
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ItemsDiffUtilCallBack(newDataSet, dataSet), true);
+        this.dataSet = newDataSet;
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public class MyListener implements NoteClickedListener {

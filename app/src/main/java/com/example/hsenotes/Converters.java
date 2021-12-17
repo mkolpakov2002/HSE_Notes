@@ -19,25 +19,30 @@ public class Converters {
 
     @TypeConverter
     public List<String> gettingListFromString(String genreIds) {
-        List<String> list = new ArrayList<>();
+        if(genreIds!=null){
+            List<String> list = new ArrayList<>();
 
-        String[] array = genreIds.split(";");
+            String[] array = genreIds.split(";");
 
-        for (String s : array) {
-            if (!s.isEmpty()) {
-                list.add((s));
+            for (String s : array) {
+                if (!s.isEmpty()) {
+                    list.add((s));
+                }
             }
-        }
-        return list;
+            return list;
+        } else return null;
     }
 
     @TypeConverter
     public String writingStringFromList(List<String> list) {
-        StringBuilder genreIds = new StringBuilder();
-        for (String i : list) {
-            genreIds.append(i).append(";");
-        }
-        genreIds.deleteCharAt(genreIds.lastIndexOf(";"));
-        return genreIds.toString();
+        if(list!=null&&list.size()>0){
+            StringBuilder genreIds = new StringBuilder();
+            for (String i : list) {
+                genreIds.append(i).append(";");
+            }
+            genreIds.deleteCharAt(genreIds.lastIndexOf(";"));
+            return genreIds.toString();
+        } else return null;
+
     }
 }
